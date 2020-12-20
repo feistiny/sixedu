@@ -1,0 +1,4 @@
+{
+  "LOG_LEVEL": "${LOG_LEVEL||5}",
+  "SQL_PATH": "/Users/osx/.gvm/pkgsets/go1.15.5/global/src/sixedu/data/"
+}
