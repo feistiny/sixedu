@@ -11,11 +11,11 @@ type registerController struct {
 }
 
 // NewReg
-func NewReg() *registerController {
+func NewReg() controller {
 	return &registerController{}
 }
 
-func (rc *registerController) Handle() bool {
+func (rc *registerController) Handle() (success bool, routes nextRoutes) {
 	println("输入你需要注册的用户信息 username,password,age,sex")
 	u := model.NewUser()
 	username := util.GetInput("输入你的用户名")
@@ -24,21 +24,26 @@ func (rc *registerController) Handle() bool {
 	pwd2 := util.GetInput("确认密码")
 	if pwd != pwd2 {
 		println("两次输入的密码不一致")
-		return false
+		success = false
+		return
 	}
 	u.SetPassword(pwd)
 	ageRaw := util.GetInput("输入你的年龄")
 	age, err := strconv.ParseInt(ageRaw, 0, 0)
 	if err != nil {
 		println("年龄输入错误")
-		return false
+		success = false
+		return
 	}
 	u.SetAge(fmt.Sprintf("%d", age))
 	sex := util.GetInput("输入你的性别")
 	u.SetSex(sex)
 	if !u.Save() {
-		return false
+		success = false
+		return
 	}
 
-	return true
+	success = true
+	routes = nextRoutes{LoginRoute, RegRoute}
+	return
 }

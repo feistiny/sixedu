@@ -9,21 +9,23 @@ import (
 type loginController struct {
 }
 
-func NewLogin() *loginController {
+func NewLogin() controller {
 	return &loginController{}
 }
 
-func (lc *loginController) Handle() bool {
+func (lc *loginController) Handle() (success bool, routes nextRoutes) {
 	logs.Debug("login start")
 	u := model.NewUser()
 	datas, err := u.All()
 	if err != nil {
 		logs.Error("登录的账号列表获取失败")
-		return false
+		success = false
+		return
 	}
 
 	if len(datas) <= 0 {
-		return false
+		success = false
+		return
 	}
 
 	username := util.GetInput("输入你的用户名")
@@ -32,7 +34,8 @@ func (lc *loginController) Handle() bool {
 	var ok bool
 	if _, ok = datas[username]; !ok {
 		println("用户不存在", username)
-		return false
+		success = false
+		return
 	}
 
 	me := datas[username].(*model.User)
@@ -40,8 +43,10 @@ func (lc *loginController) Handle() bool {
 	println("password", me.GetPassword())
 
 	if pwd != me.GetPassword() {
-		return false
+		success = false
+		return
 	}
 
-	return true
+	success = true
+	return
 }

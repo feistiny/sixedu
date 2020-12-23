@@ -2,8 +2,11 @@ package util
 
 import (
 	"bufio"
+	"errors"
+	"github.com/astaxie/beego/logs"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -47,6 +50,17 @@ func GetInput(tips ...string) string {
 		os.Exit(0)
 	}
 	return i.text
+}
+
+func GetChoice(tips ...string) (choice int, err error) {
+	choiceStr := GetInput(tips...)
+	choice, err = strconv.Atoi(choiceStr)
+	if err != nil {
+		logs.Error("输入选项获取失败", err)
+		err = errors.New("输入选项获取失败")
+		return
+	}
+	return
 }
 
 func readIntoText() (err error) {

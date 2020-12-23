@@ -12,21 +12,23 @@ import (
 type showController struct {
 }
 
-func NewShow() *showController {
+func NewShow() controller {
 	return &showController{}
 }
 
-func (lc *showController) Handle() bool {
+func (lc *showController) Handle() (success bool, routes nextRoutes) {
 	logs.Debug("show start")
 	u := model.NewUser()
 	datas, err := u.All()
 	if err != nil {
 		logs.Error("账号列表获取失败")
-		return false
+		success = false
+return
 	}
 
 	if len(datas) <= 0 {
-		return false
+		success = false
+return
 	}
 	// 打印数据
 	var titlePrinted bool
@@ -46,5 +48,6 @@ func (lc *showController) Handle() bool {
 		// println(m.(model.User).GetUsername())
 		fmt.Printf("| %s |\n", strings.Join(m.ToStringSlice(), " | "))
 	}
-	return true
+	success = true
+	return
 }
