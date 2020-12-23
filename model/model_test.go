@@ -27,7 +27,7 @@ func Test(t *testing.T) {
 	})
 	t.Run("测试 model 读出 sql", func(t *testing.T) {
 		assert.Nil(t, util.RunShell("cp ../data/user.sql.orig ../data/user.sql.test"))
-		datas, err := rfdata("user", "shineyork")
+		datas, err := rfdata("user", "username")
 		assert.Nil(t, err)
 		for _, m := range datas {
 			fmt.Println(m.ToStringSlice())
