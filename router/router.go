@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/feistiny/sixedu/controller"
 	"github.com/feistiny/sixedu/util"
+	"os"
 )
 
 var CurrentRoute = controller.IndexRoute
@@ -34,12 +35,16 @@ func dispatch(key controller.RouteKey) {
 	rc := getRouteCache(key)
 	success, nextKeys := rc.diaptch()
 	if !success {
+		println(rc.tip + "失败")
 		if len(nextKeys) == 0 {
 			nextKeys = cachedNextKeys
 		}
-		println(rc.tip + "失败")
 	} else {
 		println(rc.tip + "成功")
+		if len(nextKeys) == 0 {
+			// 成功了, 没有下一步, 就退出吧
+			os.Exit(0)
+		}
 	}
 	if len(nextKeys) > 0 {
 		cachedNextKeys = nextKeys
