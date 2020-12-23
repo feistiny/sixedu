@@ -2,8 +2,6 @@ package router
 
 import "github.com/feistiny/sixedu/controller"
 
-type NextRoutes []routeKey
-
 type controllerNewFunc func() controller.Controller
 
 // 只有用到的时候才实例化
@@ -21,7 +19,7 @@ func newRouteCache(tip string, newFunc controllerNewFunc) *routeCache {
 }
 
 // 执行路由对应的动作
-func (cc *routeCache) diaptch() (bool, NextRoutes) {
+func (cc *routeCache) diaptch() (bool, controller.NextRoutes) {
 	if cc.instance == nil {
 		cc.instance = cc.new()
 	}

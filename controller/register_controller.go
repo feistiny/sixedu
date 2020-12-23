@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/feistiny/sixedu/model"
-	"github.com/feistiny/sixedu/router"
 	"github.com/feistiny/sixedu/util"
 	"strconv"
 )
@@ -15,7 +14,7 @@ func NewReg() Controller {
 	return &registerController{}
 }
 
-func (rc *registerController) Handle() (success bool, routes router.NextRoutes) {
+func (rc *registerController) Handle() (success bool, routes NextRoutes) {
 	println("输入你需要注册的用户信息 username,password,age,sex")
 	u := model.NewUser()
 	username := util.GetInput("输入你的用户名")
@@ -44,6 +43,6 @@ func (rc *registerController) Handle() (success bool, routes router.NextRoutes) 
 	}
 
 	success = true
-	routes = router.NextRoutes{router.LoginRoute, router.RegRoute}
+	routes = NextRoutes{LoginRoute, RegRoute}
 	return
 }

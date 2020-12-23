@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"github.com/feistiny/sixedu/model"
-	"github.com/feistiny/sixedu/router"
 	"github.com/feistiny/sixedu/util"
 	"reflect"
 	"strings"
@@ -17,7 +16,7 @@ func NewShow() Controller {
 	return &showController{}
 }
 
-func (lc *showController) Handle() (success bool, routes router.NextRoutes) {
+func (lc *showController) Handle() (success bool, routes NextRoutes) {
 	logs.Debug("show start")
 	u := model.NewUser()
 	datas, err := u.All()

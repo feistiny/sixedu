@@ -1,7 +1,16 @@
 package controller
 
-import "github.com/feistiny/sixedu/router"
-
 type Controller interface {
-	Handle() (bool, router.NextRoutes)
+	Handle() (bool, NextRoutes)
 }
+
+type NextRoutes []RouteKey
+
+type RouteKey int
+
+const (
+	IndexRoute RouteKey = iota
+	LoginRoute
+	RegRoute
+	ShowRoute
+)
