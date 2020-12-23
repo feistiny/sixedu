@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"reflect"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -20,7 +21,7 @@ type Model interface {
 	Save() bool
 }
 
-type nameModels map[string]func()Model
+type nameModels map[string]func() Model
 type PrimaryModels map[string]Model
 
 var (
@@ -100,12 +101,17 @@ func rfdata(name, primary string) (datas PrimaryModels, err error) {
 		// logs.Debug("m address %p", m)
 		rm := reflect.ValueOf(m)
 		for i, field := range fields {
-			fieldName := titles[i]
-			if fieldName == primary {
+			fieldTitle := titles[i]
+			if fieldTitle == primary {
 				modelKey = field
 			}
-			rmm := rm.MethodByName("Set" + strings.Title(fieldName))
-			rmm.Call([]reflect.Value{reflect.ValueOf(field)})
+			rmm := rm.MethodByName("Set" + strings.Title(fieldTitle))
+			typeField, err := toTypeField(rm, fieldTitle, field)
+			if err != nil {
+				logs.Error("field: %s %s 转换失败, 跳过, err: %v", fieldTitle, field, err)
+				continue
+			}
+			rmm.Call([]reflect.Value{reflect.ValueOf(typeField)})
 		}
 		// logs.Debug("%+v", m)
 		if datas == nil {
@@ -150,5 +156,22 @@ func rwdata(name string, m Model) (err error) {
 		return errors.New("写入失败")
 	}
 	logs.Debug("写入字节数 ", n)
+	return
+}
+
+func toTypeField(modelV reflect.Value, title, in string) (out interface{}, err error) {
+	fieldV := modelV.Elem().FieldByName(title)
+	switch fieldV.Kind() {
+	case reflect.Int:
+		out, err = strconv.Atoi(in)
+		if err != nil {
+			return
+		}
+	case reflect.String:
+		out = in
+	default:
+		err = errors.New(fmt.Sprintf("模型参数类型转换暂时不支持的类型 %s", fieldV.Kind()))
+	}
+
 	return
 }

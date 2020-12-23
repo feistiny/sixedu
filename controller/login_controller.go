@@ -3,17 +3,18 @@ package controller
 import (
 	"github.com/astaxie/beego/logs"
 	"github.com/feistiny/sixedu/model"
+	"github.com/feistiny/sixedu/router"
 	"github.com/feistiny/sixedu/util"
 )
 
 type loginController struct {
 }
 
-func NewLogin() controller {
+func NewLogin() Controller {
 	return &loginController{}
 }
 
-func (lc *loginController) Handle() (success bool, routes nextRoutes) {
+func (lc *loginController) Handle() (success bool, routes router.NextRoutes) {
 	logs.Debug("login start")
 	u := model.NewUser()
 	datas, err := u.All()
@@ -48,5 +49,6 @@ func (lc *loginController) Handle() (success bool, routes nextRoutes) {
 	}
 
 	success = true
+	routes = router.NextRoutes{router.ShowRoute}
 	return
 }

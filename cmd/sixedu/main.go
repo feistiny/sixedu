@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/astaxie/beego/logs"
-	"github.com/feistiny/sixedu/controller"
 	"github.com/feistiny/sixedu/etc"
+	"github.com/feistiny/sixedu/router"
 	"log"
 )
 
@@ -37,5 +37,5 @@ func initLog() {
 }
 
 func main() {
-	controller.Run()
+	router.Run()
 }

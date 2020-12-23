@@ -1,6 +1,7 @@
-package controller
+package router
 
 import (
+	"github.com/feistiny/sixedu/controller"
 	"github.com/feistiny/sixedu/util"
 )
 
@@ -20,10 +21,10 @@ var routePool = make(map[routeKey]*routeCache)
 var cachedNextKeys []routeKey
 
 func init() {
-	routePool[IndexRoute] = NewRouteCache("欢迎首页", NewIndex)
-	routePool[LoginRoute] = NewRouteCache("登入账号", NewLogin)
-	routePool[RegRoute] = NewRouteCache("注册信息", NewReg)
-	routePool[ShowRoute] = NewRouteCache("展示所有账号", NewShow)
+	routePool[IndexRoute] = newRouteCache("欢迎首页", controller.NewIndex)
+	routePool[LoginRoute] = newRouteCache("登入账号", controller.NewLogin)
+	routePool[RegRoute] = newRouteCache("注册信息", controller.NewReg)
+	routePool[ShowRoute] = newRouteCache("展示所有账号", controller.NewShow)
 
 	// 按 x 后回车自动退出, 不用每个地方都判断
 	util.AutoQuit()

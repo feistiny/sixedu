@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"github.com/feistiny/sixedu/model"
+	"github.com/feistiny/sixedu/router"
 	"github.com/feistiny/sixedu/util"
 	"reflect"
 	"strings"
@@ -12,23 +13,23 @@ import (
 type showController struct {
 }
 
-func NewShow() controller {
+func NewShow() Controller {
 	return &showController{}
 }
 
-func (lc *showController) Handle() (success bool, routes nextRoutes) {
+func (lc *showController) Handle() (success bool, routes router.NextRoutes) {
 	logs.Debug("show start")
 	u := model.NewUser()
 	datas, err := u.All()
 	if err != nil {
 		logs.Error("账号列表获取失败")
 		success = false
-return
+		return
 	}
 
 	if len(datas) <= 0 {
 		success = false
-return
+		return
 	}
 	// 打印数据
 	var titlePrinted bool

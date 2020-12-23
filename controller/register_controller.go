@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/feistiny/sixedu/model"
+	"github.com/feistiny/sixedu/router"
 	"github.com/feistiny/sixedu/util"
 	"strconv"
 )
@@ -11,11 +11,11 @@ type registerController struct {
 }
 
 // NewReg
-func NewReg() controller {
+func NewReg() Controller {
 	return &registerController{}
 }
 
-func (rc *registerController) Handle() (success bool, routes nextRoutes) {
+func (rc *registerController) Handle() (success bool, routes router.NextRoutes) {
 	println("输入你需要注册的用户信息 username,password,age,sex")
 	u := model.NewUser()
 	username := util.GetInput("输入你的用户名")
@@ -35,7 +35,7 @@ func (rc *registerController) Handle() (success bool, routes nextRoutes) {
 		success = false
 		return
 	}
-	u.SetAge(fmt.Sprintf("%d", age))
+	u.SetAge(int(age))
 	sex := util.GetInput("输入你的性别")
 	u.SetSex(sex)
 	if !u.Save() {
@@ -44,6 +44,6 @@ func (rc *registerController) Handle() (success bool, routes nextRoutes) {
 	}
 
 	success = true
-	routes = nextRoutes{LoginRoute, RegRoute}
+	routes = router.NextRoutes{router.LoginRoute, router.RegRoute}
 	return
 }
